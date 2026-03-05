@@ -1,0 +1,124 @@
+/* src/index.css */
+
+/* ── DESIGN TOKENS ─────────────────────────────────────────────────── */
+:root {
+  /* Core palette */
+  --ink:     #070a0f;
+  --deep:    #0b1018;
+  --panel:   #0f1722;
+  --panel2:  #141f2e;
+  --surface: #192435;
+  --rim:     #1e2d42;
+  --rim2:    #263547;
+
+  /* Gold accent */
+  --gold:    #c8a45a;
+  --gold2:   #ddb96e;
+  --gold3:   #e8cc8a;
+  --goldDim: #6b5428;
+
+  /* Teal accent */
+  --teal:    #3ab5a0;
+  --tealDim: #1e6055;
+
+  /* Type */
+  --text:    #e2d8c8;
+  --textSub: #8a8070;
+  --textDim: #454035;
+
+  /* Status */
+  --green:   #4dba88;
+  --warn:    #d4783a;
+  --red:     #c85050;
+
+  /* Radius / spacing */
+  --r:    10px;
+  --r2:   16px;
+  --r3:   24px;
+}
+
+/* ── RESET ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Syne', 'Segoe UI', sans-serif;
+  background: var(--ink);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: var(--gold); text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: inherit; }
+
+/* ── SCROLLBAR ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--deep); }
+::-webkit-scrollbar-thumb { background: var(--rim2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--goldDim); }
+
+/* ── TYPOGRAPHY HELPERS ────────────────────────────────────────────── */
+.font-arabic {
+  font-family: 'Amiri', 'Amiri Quran', serif;
+}
+.font-quran {
+  font-family: 'Amiri Quran', serif;
+}
+
+/* ── UTILITY ───────────────────────────────────────────────────────── */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+/* ── KEYFRAME ANIMATIONS ───────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+@keyframes goldGlow {
+  from { text-shadow: 0 0 30px rgba(200,164,90,0.3); }
+  to   { text-shadow: 0 0 80px rgba(200,164,90,0.8), 0 0 140px rgba(200,164,90,0.3); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.12; }
+}

@@ -1,0 +1,103 @@
+/* src/components/StatusBar.module.css */
+
+.bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--textSub);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ok {
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+.loading {
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+  animation: pulse 0.8s ease-in-out infinite;
+}
+
+.error {
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+}
+
+.text {
+  text-transform: uppercase;
+}
+
+.refetch {
+  background: none;
+  border: none;
+  color: var(--textSub);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+
+.refetch:hover {
+  color: var(--gold);
+  background: rgba(200, 164, 90, 0.08);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.method {
+  text-transform: uppercase;
+  color: var(--textDim);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+}
+
+.settingsLink {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--textSub);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 5px 10px;
+  border: 1px solid var(--rim);
+  border-radius: 6px;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.settingsLink:hover {
+  color: var(--gold);
+  border-color: var(--goldDim);
+  background: rgba(200, 164, 90, 0.05);
+}
+
+.settingsLink:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}

@@ -1,0 +1,98 @@
+/* src/components/AdhanOverlay.module.css */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(7, 10, 15, 0.95);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease both;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 32px;
+  text-align: center;
+  animation: scaleIn 0.4s ease both;
+  max-width: 480px;
+  width: 100%;
+}
+
+.moonIcon {
+  font-size: 2.4rem;
+  color: var(--gold);
+  opacity: 0.7;
+  margin-bottom: 4px;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.prayerAr {
+  font-size: clamp(2.8rem, 10vw, 4.2rem);
+  color: var(--gold2);
+  line-height: 1.2;
+  animation: goldGlow 2s ease-in-out infinite alternate;
+}
+
+.prayerEn {
+  font-size: 0.7rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--textSub);
+  margin-top: 2px;
+}
+
+.takbeer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 1.5rem;
+  color: var(--gold);
+  margin-top: 14px;
+  animation: fadeIn 1s 0.3s ease both;
+}
+
+.dot {
+  color: var(--goldDim);
+  font-size: 1rem;
+}
+
+.shahada {
+  font-size: 1.1rem;
+  color: var(--textSub);
+  margin-top: 4px;
+  animation: fadeIn 1s 0.6s ease both;
+}
+
+.dismiss {
+  margin-top: 32px;
+  padding: 12px 36px;
+  border: 1px solid var(--goldDim);
+  border-radius: 40px;
+  color: var(--gold);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+
+.dismiss:hover {
+  background: var(--goldDim);
+  border-color: var(--gold);
+  color: #fff;
+}
+
+.dismiss:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}

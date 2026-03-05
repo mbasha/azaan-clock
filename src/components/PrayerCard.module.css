@@ -1,0 +1,101 @@
+/* src/components/PrayerCard.module.css */
+
+.card {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--rim);
+  border-radius: var(--r2);
+  padding: 18px 10px 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.35s, border-color 0.35s, box-shadow 0.35s, opacity 0.35s, transform 0.25s;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+}
+
+.topBar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--goldDim);
+  transition: background 0.4s;
+  border-radius: var(--r2) var(--r2) 0 0;
+}
+
+/* ── STATES ── */
+.active {
+  background: var(--panel2);
+  border-color: var(--goldDim);
+  box-shadow: 0 0 28px rgba(200, 164, 90, 0.12),
+              inset 0 0 32px rgba(200, 164, 90, 0.04);
+}
+.active .topBar {
+  background: linear-gradient(90deg, var(--goldDim), var(--gold2), var(--goldDim));
+}
+
+.next {
+  border-color: var(--tealDim);
+}
+.next .topBar {
+  background: var(--tealDim);
+}
+
+.passed {
+  opacity: 0.3;
+}
+
+/* ── CONTENT ── */
+.ar {
+  font-size: 1.05rem;
+  color: var(--gold);
+  line-height: 1.2;
+  display: block;
+}
+.active .ar {
+  color: var(--gold2);
+}
+.next .ar {
+  color: var(--teal);
+}
+
+.en {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--textSub);
+  display: block;
+  font-weight: 500;
+}
+
+.time {
+  font-family: 'Syne', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  display: block;
+  margin-top: 4px;
+  letter-spacing: 0.05em;
+}
+.active .time {
+  color: var(--gold3);
+}
+.next .time {
+  color: var(--teal);
+}
+
+/* Active pip */
+.activePip {
+  position: absolute;
+  bottom: 8px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold2);
+  box-shadow: 0 0 8px var(--gold);
+  animation: pulse 2s ease-in-out infinite;
+}
