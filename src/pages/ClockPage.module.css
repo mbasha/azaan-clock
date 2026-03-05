@@ -23,6 +23,10 @@
 .header {
   text-align: center;
   animation: fadeDown 0.7s ease both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .bismillah {
@@ -30,9 +34,9 @@
   color: var(--gold);
   text-shadow: 0 0 40px rgba(200, 164, 90, 0.35);
   letter-spacing: 0.04em;
-  line-height: 1.8;
+  line-height: 2.4;
   display: block;
-  padding-bottom: 0.15em;
+  overflow: visible;
 }
 
 .location {
@@ -40,8 +44,8 @@
   letter-spacing: 0.38em;
   text-transform: uppercase;
   color: var(--textSub);
-  margin-top: 2px;
   font-weight: 500;
+  margin: 0;
 }
 
 /* ── CLOCK ── */
@@ -114,10 +118,12 @@
 }
 
 .hijri {
-  font-size: 1.15rem;
+  font-size: 0.78rem;
+  font-weight: 500;
   color: var(--goldDim);
   margin-top: 4px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
 }
 
 /* ── DIVIDER ── */

@@ -1,6 +1,6 @@
 // src/utils/helpers.js
 
-import { HIJRI_MONTHS_AR } from './constants';
+import { HIJRI_MONTHS } from './constants';
 
 export const pad = (n) => String(n).padStart(2, '0');
 
@@ -51,7 +51,7 @@ export function toHijri(date) {
 
 export function formatHijriDate(date) {
   const { day, month, year } = toHijri(date);
-  return `${day} ${HIJRI_MONTHS_AR[month - 1]} ${year} هـ`;
+  return `${day} ${HIJRI_MONTHS[month - 1]} ${year} AH`;
 }
 
 /**

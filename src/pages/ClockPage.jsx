@@ -84,7 +84,7 @@ export default function ClockPage({ settings }) {
             <span>{dateStr}</span>
           </div>
           {settings.displayHijri && (
-            <div className={`${styles.hijri} font-arabic`} aria-label="Hijri date">
+            <div className={styles.hijri} aria-label="Hijri date">
               {hijriStr}
             </div>
           )}
