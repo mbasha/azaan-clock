@@ -2,8 +2,8 @@
 
 .wrap {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   flex-shrink: 0;
 }
 
@@ -44,7 +44,7 @@
 
 .time {
   font-family: 'Syne', monospace;
-  font-size: 0.82rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--gold2);
   line-height: 1;
@@ -56,7 +56,7 @@
 }
 
 .label {
-  font-size: 0.42rem;
+  font-size: 0.52rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--textSub);

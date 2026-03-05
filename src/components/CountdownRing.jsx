@@ -2,7 +2,7 @@
 import styles from './CountdownRing.module.css';
 import { formatCountdown } from '../utils/helpers';
 
-const RADIUS = 42;
+const RADIUS = 54;
 const CIRC = 2 * Math.PI * RADIUS;
 
 export default function CountdownRing({ countdownMs, progress, nextPrayer, urgent }) {
@@ -10,16 +10,16 @@ export default function CountdownRing({ countdownMs, progress, nextPrayer, urgen
 
   return (
     <div className={styles.wrap} aria-label={`Time until ${nextPrayer?.en}: ${formatCountdown(countdownMs)}`}>
-      <svg className={styles.svg} viewBox="0 0 100 100" width="100" height="100">
+      <svg className={styles.svg} viewBox="0 0 130 130" width="130" height="130">
         {/* Track */}
         <circle
           className={styles.track}
-          cx="50" cy="50" r={RADIUS}
+          cx="65" cy="65" r={RADIUS}
         />
         {/* Progress */}
         <circle
           className={`${styles.fill} ${urgent ? styles.urgent : ''}`}
-          cx="50" cy="50" r={RADIUS}
+          cx="65" cy="65" r={RADIUS}
           strokeDasharray={CIRC}
           strokeDashoffset={offset}
           style={{ transition: 'stroke-dashoffset 1s linear, stroke 0.5s' }}

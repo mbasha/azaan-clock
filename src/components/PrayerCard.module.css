@@ -52,9 +52,9 @@
 
 /* ── CONTENT ── */
 .ar {
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   color: var(--gold);
-  line-height: 1.2;
+  line-height: 1.6;
   display: block;
 }
 .active .ar {
@@ -65,7 +65,7 @@
 }
 
 .en {
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--textSub);
@@ -75,7 +75,7 @@
 
 .time {
   font-family: 'Syne', monospace;
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: var(--text);
   display: block;

@@ -20,9 +20,13 @@ export default function ClockPage({ settings }) {
     now, activePrayer, nextPrayer, countdownMs, ringProgress, adhanPrayer, dismissAdhan,
   } = useClock(times, settings);
 
-  const h = String(now.getHours()).padStart(2, '0');
+  const rawH = now.getHours();
+  const h = settings.display24h
+    ? String(rawH).padStart(2, '0')
+    : String(rawH % 12 || 12).padStart(2, '0');
   const m = String(now.getMinutes()).padStart(2, '0');
   const s = String(now.getSeconds()).padStart(2, '0');
+  const ampm = !settings.display24h ? (rawH >= 12 ? 'PM' : 'AM') : null;
 
   const dateStr   = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
   const dayStr    = DAYS[now.getDay()];
@@ -72,6 +76,7 @@ export default function ClockPage({ settings }) {
                 <span className={styles.seconds}>{s}</span>
               </>
             )}
+            {ampm && <span className={styles.ampm}>{ampm}</span>}
           </div>
           <div className={styles.dateRow}>
             <span>{dayStr}</span>
