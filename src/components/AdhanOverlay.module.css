@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   padding: 40px 32px;
   text-align: center;
   animation: scaleIn 0.4s ease both;
@@ -28,15 +28,14 @@
   font-size: 2.4rem;
   color: var(--gold);
   opacity: 0.7;
+  margin-bottom: 4px;
   animation: pulse 3s ease-in-out infinite;
 }
 
 .prayerAr {
   font-size: clamp(2.8rem, 10vw, 4.2rem);
   color: var(--gold2);
-  line-height: 2.2;
-  display: block;
-  overflow: visible;
+  line-height: 1.2;
   animation: goldGlow 2s ease-in-out infinite alternate;
 }
 
@@ -45,7 +44,7 @@
   letter-spacing: 0.45em;
   text-transform: uppercase;
   color: var(--textSub);
-  margin: 0;
+  margin-top: 2px;
 }
 
 .takbeer {
