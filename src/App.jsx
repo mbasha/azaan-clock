@@ -1,5 +1,5 @@
 // src/App.jsx
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { useSettings } from './hooks/useSettings';
 import Background from './components/Background';
 import ClockPage from './pages/ClockPage';
@@ -9,13 +9,10 @@ export default function App() {
   const { settings, updateSettings, resetSettings } = useSettings();
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Background />
       <Routes>
-        <Route
-          path="/"
-          element={<ClockPage settings={settings} />}
-        />
+        <Route path="/" element={<ClockPage settings={settings} />} />
         <Route
           path="/settings"
           element={
@@ -27,6 +24,6 @@ export default function App() {
           }
         />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

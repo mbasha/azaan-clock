@@ -1,4 +1,4 @@
-# 🕌 Azaan Clock
+# Azaan Clock
 
 A beautiful, always-on prayer times clock for your home — built with React.
 
@@ -116,14 +116,3 @@ GET https://api.aladhan.com/v1/timingsByCity/{date}?city=Charleston&country=US&m
 ```
 
 Times are cached in `localStorage` keyed by date + city — only one API call per day.
-
----
-
-## For Wall Mount (Tablet)
-
-1. Open the deployed URL in Chrome/Silk browser
-2. Tap "Add to Home Screen" for app-like experience  
-3. Open the app → tap fullscreen (F11 or browser menu)
-4. Keep screen awake: Settings → Display → Screen timeout → Never
-
-Tested on Amazon Fire HD 8 and 10.
