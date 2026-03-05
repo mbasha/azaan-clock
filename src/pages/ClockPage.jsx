@@ -1,5 +1,5 @@
 // src/pages/ClockPage.jsx
-import { useMemo } from 'react';
+import { useMemo, useState, useRef, useCallback } from 'react';
 import { useClock } from '../hooks/useClock';
 import { usePrayerTimes } from '../hooks/usePrayerTimes';
 import PrayerCard from '../components/PrayerCard';
@@ -34,6 +34,18 @@ export default function ClockPage({ settings }) {
 
   const urgent = countdownMs != null && countdownMs < 15 * 60 * 1000;
 
+  // ── LONG PRESS DEDICATION ──
+  const [showDedication, setShowDedication] = useState(false);
+  const pressTimer = useRef(null);
+
+  const handlePressStart = useCallback(() => {
+    pressTimer.current = setTimeout(() => setShowDedication(true), 700);
+  }, []);
+
+  const handlePressEnd = useCallback(() => {
+    clearTimeout(pressTimer.current);
+  }, []);
+
   // Determine display prayers (optionally hide Sunrise)
   const displayPrayers = useMemo(() =>
     settings.displaySunrise ? PRAYERS : PRAYERS.filter(p => p.key !== 'Sunrise'),
@@ -56,13 +68,44 @@ export default function ClockPage({ settings }) {
 
         {/* ── HEADER ── */}
         <header className={styles.header}>
-          <div className={`${styles.bismillah} font-quran`}>
+          <div
+            className={`${styles.bismillah} font-quran`}
+            onMouseDown={handlePressStart}
+            onMouseUp={handlePressEnd}
+            onMouseLeave={handlePressEnd}
+            onTouchStart={handlePressStart}
+            onTouchEnd={handlePressEnd}
+            style={{ cursor: 'default', userSelect: 'none' }}
+          >
             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </div>
           <p className={styles.location}>
             Prayer Times &nbsp;·&nbsp; {settings.city}, {settings.country}
           </p>
         </header>
+
+        {/* ── DEDICATION MODAL ── */}
+        {showDedication && (
+          <div className={styles.dedicationOverlay} onClick={() => setShowDedication(false)}>
+            <div className={styles.dedicationCard} onClick={e => e.stopPropagation()}>
+              <div className={styles.dedicationMoon}>☽</div>
+              <p className={`${styles.dedicationArabic} font-quran`}>
+                وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا
+              </p>
+              <p className={styles.dedicationVerse}>
+                "And of His signs is that He created for you mates from among yourselves" — Ar-Rum 30:21
+              </p>
+              <div className={styles.dedicationDivider} />
+              <p className={styles.dedicationMessage}>
+                Built with love, for my wife
+              </p>
+              <p className={styles.dedicationName}>Aminah</p>
+              <button className={styles.dedicationClose} onClick={() => setShowDedication(false)}>
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ── CLOCK ── */}
         <section className={styles.clockSection} aria-label="Current time">
