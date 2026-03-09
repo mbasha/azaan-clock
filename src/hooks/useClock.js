@@ -3,74 +3,61 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { ADHAN_PRAYERS } from '../utils/constants';
 import { playChime } from '../utils/helpers';
 
-// Shared AudioContext — created once on first user gesture
+// Shared unlocked AudioContext — only created after user gesture
 let sharedCtx = null;
+let audioUnlocked = false;
 
-function getAudioContext() {
-  if (!sharedCtx || sharedCtx.state === 'closed') {
-    sharedCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  return sharedCtx;
-}
-
-// Unlock AudioContext on the first user interaction anywhere on the page
-function unlockAudio() {
+export function unlockAudio() {
   try {
-    const ctx = getAudioContext();
-    if (ctx.state === 'suspended') ctx.resume();
-  } catch (e) {}
-}
-if (typeof window !== 'undefined') {
-  ['click', 'touchstart', 'keydown'].forEach(evt =>
-    window.addEventListener(evt, unlockAudio, { once: true, passive: true })
-  );
+    if (!sharedCtx) {
+      sharedCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (sharedCtx.state === 'suspended') {
+      sharedCtx.resume();
+    }
+    audioUnlocked = true;
+  } catch (e) {
+    console.warn('AudioContext unlock failed:', e);
+  }
 }
 
-/**
- * Play an audio file via AudioContext so it works even after autoplay policy kicks in.
- * Falls back to HTML Audio element if fetch fails (e.g. CORS).
- */
 async function playAudioUrl(url, volume = 0.85, audioRef) {
-  // Stop any currently playing audio
   if (audioRef.current) {
     try { audioRef.current.pause(); } catch (e) {}
     audioRef.current = null;
   }
 
-  // First try HTML Audio — simplest, works for same-origin and CORS-permissive sources
   try {
     const audio = new Audio();
     audio.crossOrigin = 'anonymous';
     audio.volume = volume;
     audio.src = url;
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      await playPromise;
-    }
+    await audio.play();
     audioRef.current = audio;
     return;
   } catch (e) {
-    // Autoplay blocked or CORS issue — fall through to AudioContext approach
+    // Blocked — fall through to AudioContext decode
   }
 
-  // Fallback: fetch + AudioContext decode (bypasses autoplay policy after unlock)
+  if (!audioUnlocked || !sharedCtx) {
+    console.warn('Audio not unlocked yet — user must tap the screen first');
+    return;
+  }
   try {
-    const ctx = getAudioContext();
-    if (ctx.state === 'suspended') await ctx.resume();
+    if (sharedCtx.state === 'suspended') await sharedCtx.resume();
     const response = await fetch(url);
     const arrayBuffer = await response.arrayBuffer();
-    const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
-    const source = ctx.createBufferSource();
-    const gainNode = ctx.createGain();
+    const audioBuffer = await sharedCtx.decodeAudioData(arrayBuffer);
+    const source = sharedCtx.createBufferSource();
+    const gainNode = sharedCtx.createGain();
     gainNode.gain.value = volume;
     source.buffer = audioBuffer;
     source.connect(gainNode);
-    gainNode.connect(ctx.destination);
+    gainNode.connect(sharedCtx.destination);
     source.start(0);
-    // Store a stop handle
     audioRef.current = { pause: () => { try { source.stop(); } catch(e) {} } };
   } catch (e) {
-    console.warn('Adhan audio failed to play:', e);
+    console.warn('Adhan audio failed:', e);
   }
 }
 
@@ -81,13 +68,11 @@ export function useClock(times, settings) {
   const firedWarn  = useRef({});
   const audioRef   = useRef(null);
 
-  // Tick every second
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  // Reset fired flags on new day
   useEffect(() => {
     const today = now.toDateString();
     if (firedAdhan.current._date !== today) {
@@ -102,7 +87,6 @@ export function useClock(times, settings) {
     playAudioUrl(url, settings.adhanVolume || 0.85, audioRef);
   }, [settings]);
 
-  // Check alarms
   useEffect(() => {
     if (!Object.keys(times).length) return;
 
@@ -141,7 +125,6 @@ export function useClock(times, settings) {
     }
   }, []);
 
-  // Derive active and next prayer indices
   let activePrayerIdx = -1;
   ADHAN_PRAYERS.forEach((p, i) => {
     if (times[p.key] && times[p.key] <= now) activePrayerIdx = i;
@@ -166,12 +149,6 @@ export function useClock(times, settings) {
   }
 
   return {
-    now,
-    activePrayer,
-    nextPrayer,
-    countdownMs,
-    ringProgress,
-    adhanPrayer,
-    dismissAdhan,
+    now, activePrayer, nextPrayer, countdownMs, ringProgress, adhanPrayer, dismissAdhan,
   };
 }

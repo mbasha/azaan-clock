@@ -1,6 +1,6 @@
 // src/pages/ClockPage.jsx
 import { useMemo, useState, useRef, useCallback } from 'react';
-import { useClock } from '../hooks/useClock';
+import { useClock, unlockAudio } from '../hooks/useClock';
 import { usePrayerTimes } from '../hooks/usePrayerTimes';
 import PrayerCard from '../components/PrayerCard';
 import CountdownRing from '../components/CountdownRing';
@@ -33,6 +33,13 @@ export default function ClockPage({ settings }) {
   const hijriStr  = formatHijriDate(now);
 
   const urgent = countdownMs != null && countdownMs < 15 * 60 * 1000;
+
+  // ── SOUND UNLOCK ──
+  const [soundUnlocked, setSoundUnlocked] = useState(false);
+  function handleUnlockSound() {
+    unlockAudio();
+    setSoundUnlocked(true);
+  }
 
   // ── LONG PRESS DEDICATION ──
   const [showDedication, setShowDedication] = useState(false);
@@ -193,6 +200,13 @@ export default function ClockPage({ settings }) {
           settings={settings}
           onRefetch={refetch}
         />
+
+        {/* ── SOUND UNLOCK BANNER ── */}
+        {!soundUnlocked && (
+          <button className={styles.soundBanner} onClick={handleUnlockSound}>
+            🔊 Tap to enable Adhan audio
+          </button>
+        )}
 
       </div>
     </div>
