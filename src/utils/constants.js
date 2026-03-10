@@ -24,10 +24,10 @@ export const CALCULATION_METHODS = [
 ];
 
 export const ADHAN_VOICES = [
-  { value: 'https://www.islamcan.com/audio/adhan/azan1.mp3',  label: 'Makkah — Sheikh Ali Ahmed Mullah' },
-  { value: 'https://www.islamcan.com/audio/adhan/azan2.mp3',  label: 'Madinah — Classic' },
-  { value: 'https://www.islamcan.com/audio/adhan/azan3.mp3',  label: 'Al-Aqsa — Jerusalem' },
-  { value: 'https://www.islamcan.com/audio/adhan/azan4.mp3',  label: 'Egyptian — Traditional' },
+  { value: 'https://ia800905.us.archive.org/9/items/MakkahAdhan/Makkah_Fajr.mp3',     label: 'Makkah — Fajr' },
+  { value: 'https://ia800905.us.archive.org/9/items/MakkahAdhan/Makkah_Adhan.mp3',    label: 'Makkah — Standard' },
+  { value: 'https://ia903405.us.archive.org/7/items/adhan_20220330/madinah.mp3',       label: 'Madinah — Classic' },
+  { value: 'https://ia903405.us.archive.org/7/items/adhan_20220330/egypt.mp3',         label: 'Egyptian — Traditional' },
   { value: 'custom', label: 'Custom URL…' },
 ];
 
@@ -57,7 +57,7 @@ export const DEFAULT_SETTINGS = {
   midnightMode: 0, // 0 = Standard, 1 = Jafari
 
   // Audio
-  adhanUrl: 'https://www.islamcan.com/audio/adhan/azan1.mp3',
+  adhanUrl: 'https://ia800905.us.archive.org/9/items/MakkahAdhan/Makkah_Adhan.mp3',
   customAdhanUrl: '',
   adhanVolume: 0.85,
   enableFajrAdhan: true,
