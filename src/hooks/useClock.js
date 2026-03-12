@@ -1,7 +1,18 @@
 // src/hooks/useClock.js
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { ADHAN_PRAYERS } from '../utils/constants';
-import { playChime } from '../utils/helpers';
+
+function playChimeFile(volume = 0.7) {
+  [0, 2000, 4000].forEach(delay => {
+    setTimeout(() => {
+      try {
+        const audio = new Audio('/azaan-clock/chime.mp3');
+        audio.volume = volume;
+        audio.play().catch(e => console.warn('Chime failed:', e));
+      } catch (e) {}
+    }, delay);
+  });
+}
 
 export function useClock(times, settings) {
   const [now, setNow] = useState(new Date());
@@ -33,11 +44,9 @@ export function useClock(times, settings) {
       const url = settings.customAdhanUrl || settings.adhanUrl;
       const audio = new Audio(url);
       audio.volume = settings.adhanVolume || 0.85;
-      audio.play().catch(e => console.warn('Adhan play failed:', e));
+      audio.play().catch(e => console.warn('Adhan failed:', e));
       audioRef.current = audio;
-    } catch (e) {
-      console.warn('Adhan error:', e);
-    }
+    } catch (e) {}
   }, [settings]);
 
   useEffect(() => {
@@ -55,7 +64,7 @@ export function useClock(times, settings) {
         triggerAdhan(p);
       }
 
-      if (settings.enableWarning && i < ADHAN_PRAYERS.length - 1) {
+      if (settings.enableWarning !== false && i < ADHAN_PRAYERS.length - 1) {
         const nextKey = ADHAN_PRAYERS[i + 1].key;
         const nextT = times[nextKey];
         if (nextT) {
@@ -63,7 +72,9 @@ export function useClock(times, settings) {
           const window = settings.warningMinutes || 5;
           if (minsToNext > window - 0.5 && minsToNext < window + 0.5 && !firedWarn.current[p.key]) {
             firedWarn.current[p.key] = true;
-            if (settings.enableChime !== false) playChime(settings.adhanVolume || 0.7);
+            if (settings.enableChime !== false) {
+              playChimeFile(settings.adhanVolume || 0.7);
+            }
           }
         }
       }
