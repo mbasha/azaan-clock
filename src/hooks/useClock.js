@@ -3,64 +3,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { ADHAN_PRAYERS } from '../utils/constants';
 import { playChime } from '../utils/helpers';
 
-// Shared unlocked AudioContext — only created after user gesture
-let sharedCtx = null;
-let audioUnlocked = false;
-
-export function unlockAudio() {
-  try {
-    if (!sharedCtx) {
-      sharedCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (sharedCtx.state === 'suspended') {
-      sharedCtx.resume();
-    }
-    audioUnlocked = true;
-  } catch (e) {
-    console.warn('AudioContext unlock failed:', e);
-  }
-}
-
-async function playAudioUrl(url, volume = 0.85, audioRef) {
-  if (audioRef.current) {
-    try { audioRef.current.pause(); } catch (e) {}
-    audioRef.current = null;
-  }
-
-  try {
-    const audio = new Audio();
-    audio.crossOrigin = 'anonymous';
-    audio.volume = volume;
-    audio.src = url;
-    await audio.play();
-    audioRef.current = audio;
-    return;
-  } catch (e) {
-    // Blocked — fall through to AudioContext decode
-  }
-
-  if (!audioUnlocked || !sharedCtx) {
-    console.warn('Audio not unlocked yet — user must tap the screen first');
-    return;
-  }
-  try {
-    if (sharedCtx.state === 'suspended') await sharedCtx.resume();
-    const response = await fetch(url);
-    const arrayBuffer = await response.arrayBuffer();
-    const audioBuffer = await sharedCtx.decodeAudioData(arrayBuffer);
-    const source = sharedCtx.createBufferSource();
-    const gainNode = sharedCtx.createGain();
-    gainNode.gain.value = volume;
-    source.buffer = audioBuffer;
-    source.connect(gainNode);
-    gainNode.connect(sharedCtx.destination);
-    source.start(0);
-    audioRef.current = { pause: () => { try { source.stop(); } catch(e) {} } };
-  } catch (e) {
-    console.warn('Adhan audio failed:', e);
-  }
-}
-
 export function useClock(times, settings) {
   const [now, setNow] = useState(new Date());
   const [adhanPrayer, setAdhanPrayer] = useState(null);
@@ -83,8 +25,19 @@ export function useClock(times, settings) {
 
   const triggerAdhan = useCallback((prayer) => {
     setAdhanPrayer(prayer);
-    const url = settings.customAdhanUrl || settings.adhanUrl;
-    playAudioUrl(url, settings.adhanVolume || 0.85, audioRef);
+    try {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      const url = settings.customAdhanUrl || settings.adhanUrl;
+      const audio = new Audio(url);
+      audio.volume = settings.adhanVolume || 0.85;
+      audio.play().catch(e => console.warn('Adhan play failed:', e));
+      audioRef.current = audio;
+    } catch (e) {
+      console.warn('Adhan error:', e);
+    }
   }, [settings]);
 
   useEffect(() => {
@@ -120,7 +73,7 @@ export function useClock(times, settings) {
   const dismissAdhan = useCallback(() => {
     setAdhanPrayer(null);
     if (audioRef.current) {
-      try { audioRef.current.pause(); } catch (e) {}
+      audioRef.current.pause();
       audioRef.current = null;
     }
   }, []);
