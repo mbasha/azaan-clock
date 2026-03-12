@@ -24,10 +24,14 @@ export const CALCULATION_METHODS = [
 ];
 
 export const ADHAN_VOICES = [
-  { value: 'https://ia800905.us.archive.org/9/items/MakkahAdhan/Makkah_Fajr.mp3',     label: 'Makkah — Fajr' },
-  { value: 'https://ia800905.us.archive.org/9/items/MakkahAdhan/Makkah_Adhan.mp3',    label: 'Makkah — Standard' },
-  { value: 'https://ia903405.us.archive.org/7/items/adhan_20220330/madinah.mp3',       label: 'Madinah — Classic' },
-  { value: 'https://ia903405.us.archive.org/7/items/adhan_20220330/egypt.mp3',         label: 'Egyptian — Traditional' },
+  { value: 'https://ia601500.us.archive.org/3/items/AdzanMerdu/mecca_56_22.mp3',               label: 'Makkah — Masjid al-Haram' },
+  { value: 'https://ia601500.us.archive.org/3/items/AdzanMerdu/adan_madinah_32_16.mp3',        label: 'Madinah — Classic' },
+  { value: 'https://ia601500.us.archive.org/3/items/AdzanMerdu/athan_egypt.mp3',               label: 'Egyptian — Traditional' },
+  { value: 'https://ia601500.us.archive.org/3/items/AdzanMerdu/Madina-Adzan-Fajr.mp3',         label: 'Madinah — Fajr (Abu Hazim)' },
+  { value: 'https://ia601500.us.archive.org/3/items/AdzanMerdu/alaqsa1_64_22.mp3',             label: 'Al-Aqsa — Jerusalem' },
+  { value: 'https://ia601500.us.archive.org/3/items/AdzanMerdu/Adzan-Misyari-Rasyid.mp3',      label: 'Mishari Rashid al-Afasy' },
+  { value: 'https://ia601500.us.archive.org/3/items/AdzanMerdu/adzan_turkey-1.mp3',            label: 'Turkey — Istanbul' },
+  { value: 'https://ia601500.us.archive.org/3/items/AdzanMerdu/Adzan-Bosnia.mp3',              label: 'Bosnia' },
   { value: 'custom', label: 'Custom URL…' },
 ];
 
