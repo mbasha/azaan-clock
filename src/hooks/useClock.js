@@ -19,7 +19,18 @@ export function useClock(times, settings) {
   const [adhanPrayer, setAdhanPrayer] = useState(null);
   const firedAdhan = useRef({});
   const firedWarn  = useRef({});
-  const audioRef   = useRef(null);
+  const adhanAudioRef = useRef(null); 
+
+  useEffect(() => {
+    const url = settings.customAdhanUrl || settings.adhanUrl;
+    if (!url) return;
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = url;
+    audio.load();
+    adhanAudioRef.current = audio;
+    return () => { audio.pause(); };
+  }, [settings.adhanUrl, settings.customAdhanUrl]);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -37,17 +48,13 @@ export function useClock(times, settings) {
   const triggerAdhan = useCallback((prayer) => {
     setAdhanPrayer(prayer);
     try {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-      const url = settings.customAdhanUrl || settings.adhanUrl;
-      const audio = new Audio(url);
+      const audio = adhanAudioRef.current;
+      if (!audio) return;
       audio.volume = settings.adhanVolume || 0.85;
+      audio.currentTime = 0;
       audio.play().catch(e => console.warn('Adhan failed:', e));
-      audioRef.current = audio;
     } catch (e) {}
-  }, [settings]);
+  }, [settings.adhanVolume]);
 
   useEffect(() => {
     if (!Object.keys(times).length) return;
@@ -83,9 +90,9 @@ export function useClock(times, settings) {
 
   const dismissAdhan = useCallback(() => {
     setAdhanPrayer(null);
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
+    if (adhanAudioRef.current) {
+      adhanAudioRef.current.pause();
+      adhanAudioRef.current.currentTime = 0;
     }
   }, []);
 
