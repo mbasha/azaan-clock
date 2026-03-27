@@ -19,7 +19,8 @@ export function useClock(times, settings) {
   const [adhanPrayer, setAdhanPrayer] = useState(null);
   const firedAdhan = useRef({});
   const firedWarn  = useRef({});
-  const adhanAudioRef = useRef(null); 
+  const adhanAudioRef = useRef(null);
+  const autoDismissRef = useRef(null);
 
   useEffect(() => {
     const url = settings.customAdhanUrl || settings.adhanUrl;
@@ -45,6 +46,18 @@ export function useClock(times, settings) {
     }
   }, [now]);
 
+  const dismissAdhan = useCallback(() => {
+    setAdhanPrayer(null);
+    if (adhanAudioRef.current) {
+      adhanAudioRef.current.pause();
+      adhanAudioRef.current.currentTime = 0;
+    }
+    if (autoDismissRef.current) {
+      clearTimeout(autoDismissRef.current);
+      autoDismissRef.current = null;
+    }
+  }, []);
+
   const triggerAdhan = useCallback((prayer) => {
     setAdhanPrayer(prayer);
     try {
@@ -54,7 +67,13 @@ export function useClock(times, settings) {
       audio.currentTime = 0;
       audio.play().catch(e => console.warn('Adhan failed:', e));
     } catch (e) {}
-  }, [settings.adhanVolume]);
+
+    // Auto-dismiss after 5 minutes
+    if (autoDismissRef.current) clearTimeout(autoDismissRef.current);
+    autoDismissRef.current = setTimeout(() => {
+      dismissAdhan();
+    }, 5 * 60 * 1000);
+  }, [settings.adhanVolume, dismissAdhan]);
 
   useEffect(() => {
     if (!Object.keys(times).length) return;
@@ -87,14 +106,6 @@ export function useClock(times, settings) {
       }
     });
   }, [now, times, settings, triggerAdhan]);
-
-  const dismissAdhan = useCallback(() => {
-    setAdhanPrayer(null);
-    if (adhanAudioRef.current) {
-      adhanAudioRef.current.pause();
-      adhanAudioRef.current.currentTime = 0;
-    }
-  }, []);
 
   let activePrayerIdx = -1;
   ADHAN_PRAYERS.forEach((p, i) => {
