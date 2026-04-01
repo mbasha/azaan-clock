@@ -382,10 +382,10 @@ export default function SettingsPage({ settings, updateSettings, resetSettings }
             <Toggle checked={draft.displayHijri !== false} onChange={v => set('displayHijri', v)} label="Show Hijri date" />
           </Row>
           <Row label="24-hour time" hint="Use 24h format instead of 12h AM/PM">
-            <Toggle checked={draft.display24h !== false} onChange={v => set('display24h', v)} label="24-hour time" />
+            <Toggle checked={draft.display24h !== true} onChange={v => set('display24h', v)} label="24-hour time" />
           </Row>
           <Row label="Show seconds">
-            <Toggle checked={draft.showSeconds !== false} onChange={v => set('showSeconds', v)} label="Show seconds" />
+            <Toggle checked={draft.showSeconds !== true} onChange={v => set('showSeconds', v)} label="Show seconds" />
           </Row>
           <Row label="Show Sunrise" hint="Display Sunrise (Ishraq) in the prayer grid">
             <Toggle checked={draft.displaySunrise !== false} onChange={v => set('displaySunrise', v)} label="Show sunrise" />

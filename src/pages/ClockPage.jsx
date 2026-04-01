@@ -28,25 +28,22 @@ export default function ClockPage({ settings }) {
   const s = String(now.getSeconds()).padStart(2, '0');
   const ampm = !settings.display24h ? (rawH >= 12 ? 'PM' : 'AM') : null;
 
-  const dateStr   = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
-  const dayStr    = DAYS[now.getDay()];
-  const hijriStr  = formatHijriDate(now);
+  const dateStr  = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+  const dayStr   = DAYS[now.getDay()];
+  const hijriStr = formatHijriDate(now);
 
   const urgent = countdownMs != null && countdownMs < 15 * 60 * 1000;
 
   // ── LONG PRESS DEDICATION ──
   const [showDedication, setShowDedication] = useState(false);
   const pressTimer = useRef(null);
-
   const handlePressStart = useCallback(() => {
     pressTimer.current = setTimeout(() => setShowDedication(true), 700);
   }, []);
-
   const handlePressEnd = useCallback(() => {
     clearTimeout(pressTimer.current);
   }, []);
 
-  // Determine display prayers (optionally hide Sunrise)
   const displayPrayers = useMemo(() =>
     settings.displaySunrise ? PRAYERS : PRAYERS.filter(p => p.key !== 'Sunrise'),
   [settings.displaySunrise]);
@@ -79,8 +76,22 @@ export default function ClockPage({ settings }) {
           >
             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </div>
+          {/* Compact time + date line */}
+          <div className={styles.compactTime}>
+            <span className={styles.compactClock}>
+              {h}:{m}{settings.showSeconds ? `:${s}` : ''}{ampm ? ` ${ampm}` : ''}
+            </span>
+            <span className={styles.compactSep}>·</span>
+            <span>{dayStr}, {dateStr}</span>
+            {settings.displayHijri && (
+              <>
+                <span className={styles.compactSep}>·</span>
+                <span>{hijriStr}</span>
+              </>
+            )}
+          </div>
           <p className={styles.location}>
-            Prayer Times &nbsp;·&nbsp; {settings.city}, {settings.country}
+            {settings.city}, {settings.country}
           </p>
         </header>
 
@@ -96,39 +107,26 @@ export default function ClockPage({ settings }) {
                 "And of His signs is that He created for you mates from among yourselves" — Ar-Rum 30:21
               </p>
               <div className={styles.dedicationDivider} />
-              <p className={styles.dedicationMessage}>
-                Built with love, for my wife
-              </p>
+              <p className={styles.dedicationMessage}>Built with love, for my wife</p>
               <p className={styles.dedicationName}>Aminah</p>
-              <button className={styles.dedicationClose} onClick={() => setShowDedication(false)}>
-                ✕
-              </button>
+              <button className={styles.dedicationClose} onClick={() => setShowDedication(false)}>✕</button>
             </div>
           </div>
         )}
 
-        {/* ── CLOCK ── */}
-        <section className={styles.clockSection} aria-label="Current time">
-          <div className={styles.timeDisplay} aria-live="polite" aria-atomic="true">
-            <span>{h}</span>
-            <span className={styles.colon} aria-hidden="true">:</span>
-            <span>{m}</span>
-            {settings.showSeconds && (
-              <>
-                <span className={`${styles.colon} ${styles.colonSec}`} aria-hidden="true">:</span>
-                <span className={styles.seconds}>{s}</span>
-              </>
-            )}
-            {ampm && <span className={styles.ampm}>{ampm}</span>}
-          </div>
-          <div className={styles.dateRow}>
-            <span>{dayStr}</span>
-            <span className={styles.dateSep} aria-hidden="true">·</span>
-            <span>{dateStr}</span>
-          </div>
-          {settings.displayHijri && (
-            <div className={styles.hijri} aria-label="Hijri date">
-              {hijriStr}
+        {/* ── COUNTDOWN RING (hero) ── */}
+        <section className={styles.ringSection} aria-label="Next prayer countdown">
+          <CountdownRing
+            countdownMs={countdownMs}
+            progress={ringProgress}
+            nextPrayer={nextPrayer}
+            urgent={urgent}
+          />
+          {activePrayer && (
+            <div className={styles.currentPrayer}>
+              <span className={styles.currentLabel}>Current</span>
+              <span className={`${styles.currentName} font-arabic`}>{activePrayer.ar}</span>
+              <span className={styles.currentEn}>{activePrayer.en}</span>
             </div>
           )}
         </section>
@@ -150,40 +148,6 @@ export default function ClockPage({ settings }) {
               use24h={settings.display24h}
             />
           ))}
-        </section>
-
-        {/* ── INFO BAR ── */}
-        <section className={styles.infoBar} aria-label="Current and next prayer">
-          <div className={styles.infoBlock}>
-            <span className={styles.infoLabel}>Current Prayer</span>
-            {activePrayer ? (
-              <>
-                <span className={`${styles.infoValueAr} font-arabic`}>{activePrayer.ar}</span>
-                <span className={styles.infoValueEn}>{activePrayer.en}</span>
-              </>
-            ) : (
-              <span className={styles.infoValueEn}>Before Fajr</span>
-            )}
-          </div>
-
-          <CountdownRing
-            countdownMs={countdownMs}
-            progress={ringProgress}
-            nextPrayer={nextPrayer}
-            urgent={urgent}
-          />
-
-          <div className={`${styles.infoBlock} ${styles.infoRight}`}>
-            <span className={styles.infoLabel}>Next Prayer</span>
-            {nextPrayer ? (
-              <>
-                <span className={`${styles.infoValueAr} font-arabic`}>{nextPrayer.ar}</span>
-                <span className={styles.infoValueEn}>{nextPrayer.en}</span>
-              </>
-            ) : (
-              <span className={styles.infoValueEn}>—</span>
-            )}
-          </div>
         </section>
 
         {/* ── STATUS BAR ── */}
