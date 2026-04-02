@@ -2,80 +2,70 @@
 
 .wrap {
   position: relative;
-  width: 210px;
-  height: 210px;
-  flex-shrink: 0;
+  width: 100%;
+  max-width: 700px;
 }
 
 .svg {
-  transform: rotate(-90deg);
-  filter: drop-shadow(0 0 12px rgba(200, 164, 90, 0.3));
+  width: 100%;
+  height: auto;
   display: block;
+  overflow: visible;
 }
 
-.track {
-  fill: none;
-  stroke: #182030;
-  stroke-width: 6;
-}
-
-.fill {
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: 6;
-  stroke-linecap: round;
-}
-
-.urgent {
-  stroke: var(--warn) !important;
-}
-
-.center {
+/* Positioned to fill the dome space — top aligns near the apex */
+.content {
   position: absolute;
-  inset: 0;
+  top: 12%;       /* start near the top of the dome */
+  bottom: 28px;
+  left: 15%;
+  right: 15%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 3px;
-  padding: 24px;
+  gap: 4px;
 }
 
-.prayerAr {
-  font-size: 1.6rem;
+.activeAr {
+  font-size: clamp(2rem, 5vw, 3.2rem);
   color: var(--gold2);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-.prayerEn {
-  font-size: 0.7rem;
-  letter-spacing: 0.28em;
+.activeEn {
+  font-size: clamp(0.6rem, 1.5vw, 0.82rem);
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--textSub);
   font-weight: 500;
-  line-height: 1;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
-.time {
+.countdown {
   font-family: 'Syne', monospace;
-  font-size: 1.5rem;
+  font-size: clamp(3rem, 8vw, 5.5rem);
   font-weight: 700;
   color: var(--gold2);
   line-height: 1;
   letter-spacing: 0.04em;
+  text-shadow:
+    0 0 40px rgba(200, 164, 90, 0.5),
+    0 0 80px rgba(200, 164, 90, 0.2);
 }
 
 .urgentText {
   color: var(--warn);
+  text-shadow:
+    0 0 40px rgba(220, 80, 80, 0.5),
+    0 0 80px rgba(220, 80, 80, 0.2);
 }
 
-.label {
-  font-size: 0.52rem;
-  letter-spacing: 0.14em;
+.untilLabel {
+  font-size: clamp(0.55rem, 1.2vw, 0.7rem);
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--textSub);
-  line-height: 1.2;
-  margin-top: 2px;
+  margin-top: 4px;
 }

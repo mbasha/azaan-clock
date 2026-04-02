@@ -117,19 +117,13 @@ export default function ClockPage({ settings }) {
         {/* ── COUNTDOWN RING (hero) ── */}
         <section className={styles.ringSection} aria-label="Next prayer countdown">
           <CountdownRing
+            activePrayer={activePrayer}
             countdownMs={countdownMs}
             progress={ringProgress}
             nextPrayer={nextPrayer}
             urgent={urgent}
           />
-          {activePrayer && (
-            <div className={styles.currentPrayer}>
-              <span className={styles.currentLabel}>Current</span>
-              <span className={`${styles.currentName} font-arabic`}>{activePrayer.ar}</span>
-              <span className={styles.currentEn}>{activePrayer.en}</span>
-            </div>
-          )}
-        </section>
+          </section>
 
         <div className={styles.divider} aria-hidden="true" />
 

@@ -83,34 +83,7 @@
   width: 100%;
 }
 
-.currentPrayer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  min-width: 100px;
-}
 
-.currentLabel {
-  font-size: 0.62rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--textSub);
-  font-weight: 500;
-}
-
-.currentName {
-  font-size: 1.8rem;
-  color: var(--gold2);
-  line-height: 1.6;
-}
-
-.currentEn {
-  font-size: 0.78rem;
-  color: var(--textSub);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
 
 /* ── DIVIDER ── */
 .divider {
