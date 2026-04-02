@@ -21,12 +21,11 @@ export function formatTime(date, use24h = true) {
  * Format seconds as HH:MM:SS or MM:SS
  */
 export function formatCountdown(ms) {
-  const totalSecs = Math.max(0, Math.floor(ms / 1000));
-  const h = Math.floor(totalSecs / 3600);
-  const m = Math.floor((totalSecs % 3600) / 60);
-  const s = totalSecs % 60;
-  if (h > 0) return `${pad(h)}:${pad(m)}:${pad(s)}`;
-  return `${pad(m)}:${pad(s)}`;
+  const totalMins = Math.max(0, Math.floor(ms / 60000));
+  const h = Math.floor(totalMins / 60);
+  const m = totalMins % 60;
+  if (h > 0) return `${pad(h)}:${pad(m)}`;
+  return `${pad(m)}m`;
 }
 
 /**
@@ -96,4 +95,3 @@ export async function fetchPrayerTimes({ city, country, method, latitude, longit
 
   return json.data.timings;
 }
-

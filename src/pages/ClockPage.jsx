@@ -21,12 +21,9 @@ export default function ClockPage({ settings }) {
   } = useClock(times, settings);
 
   const rawH = now.getHours();
-  const h = settings.display24h
-    ? String(rawH).padStart(2, '0')
-    : String(rawH % 12 || 12).padStart(2, '0');
+  const h = String(rawH % 12 || 12).padStart(2, '0');
   const m = String(now.getMinutes()).padStart(2, '0');
-  const s = String(now.getSeconds()).padStart(2, '0');
-  const ampm = !settings.display24h ? (rawH >= 12 ? 'PM' : 'AM') : null;
+  const ampm = rawH >= 12 ? 'PM' : 'AM';
 
   const dateStr  = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
   const dayStr   = DAYS[now.getDay()];
@@ -79,7 +76,7 @@ export default function ClockPage({ settings }) {
           {/* Compact time + date line */}
           <div className={styles.compactTime}>
             <span className={styles.compactClock}>
-              {h}:{m}{settings.showSeconds ? `:${s}` : ''}{ampm ? ` ${ampm}` : ''}
+              {h}:{m} {ampm}
             </span>
             <span className={styles.compactSep}>·</span>
             <span>{dayStr}, {dateStr}</span>
@@ -139,7 +136,6 @@ export default function ClockPage({ settings }) {
               prayer={prayer}
               time={times[prayer.key]}
               state={getPrayerState(prayer)}
-              use24h={settings.display24h}
             />
           ))}
         </section>

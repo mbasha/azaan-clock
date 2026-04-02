@@ -22,6 +22,7 @@ export function useClock(times, settings) {
   const adhanAudioRef = useRef(null);
   const autoDismissRef = useRef(null);
 
+  // Preload adhan as soon as URL is known so Safari doesn't block timer-fired play()
   useEffect(() => {
     const url = settings.customAdhanUrl || settings.adhanUrl;
     if (!url) return;
@@ -84,7 +85,7 @@ export function useClock(times, settings) {
 
       const diffMs = now - t;
 
-      const adhanEnabled = settings[`enable${p.key}Adhan`] !== false;
+      const adhanEnabled = p.key !== 'Sunrise' && settings[`enable${p.key}Adhan`] !== false;
       if (adhanEnabled && diffMs >= 0 && diffMs < 30000 && !firedAdhan.current[p.key]) {
         firedAdhan.current[p.key] = true;
         triggerAdhan(p);

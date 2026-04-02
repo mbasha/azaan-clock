@@ -2,14 +2,14 @@
 
 export const PRAYERS = [
   { key: 'Fajr',    ar: 'الفجر',   en: 'Fajr',    description: 'Pre-dawn prayer' },
-  { key: 'Sunrise', ar: 'الشروق',  en: 'Sunrise',  description: 'Sunrise (Ishraq)', isInfo: true },
+  { key: 'Sunrise', ar: 'الشروق',  en: 'Sunrise',  description: 'Sunrise (Ishraq)' },
   { key: 'Dhuhr',   ar: 'الظهر',   en: 'Dhuhr',   description: 'Midday prayer' },
   { key: 'Asr',     ar: 'العصر',   en: 'Asr',     description: 'Afternoon prayer' },
   { key: 'Maghrib', ar: 'المغرب',  en: 'Maghrib', description: 'Sunset prayer' },
   { key: 'Isha',    ar: 'العشاء',  en: "Isha'a",  description: 'Night prayer' },
 ];
 
-export const ADHAN_PRAYERS = PRAYERS.filter(p => !p.isInfo);
+export const ADHAN_PRAYERS = PRAYERS;
 
 export const CALCULATION_METHODS = [
   { value: 2,  label: 'ISNA',             description: 'Islamic Society of North America — recommended for USA & Canada' },
@@ -70,11 +70,9 @@ export const DEFAULT_SETTINGS = {
 
   // Display
   displayHijri: true,
-  display24h: true,
   displaySunrise: true,
   theme: 'dark',             // 'dark' | 'light'
   accentColor: 'gold',       // 'gold' | 'teal' | 'rose'
-  showSeconds: true,
 
   // Misc
   lastFetched: null,
