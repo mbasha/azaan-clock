@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/azaan-clock/static/css/main.1148fd0c.css",
-    "main.js": "/azaan-clock/static/js/main.58f090ce.js",
+    "main.js": "/azaan-clock/static/js/main.113e3997.js",
     "index.html": "/azaan-clock/index.html",
     "main.1148fd0c.css.map": "/azaan-clock/static/css/main.1148fd0c.css.map",
-    "main.58f090ce.js.map": "/azaan-clock/static/js/main.58f090ce.js.map"
+    "main.113e3997.js.map": "/azaan-clock/static/js/main.113e3997.js.map"
   },
   "entrypoints": [
     "static/css/main.1148fd0c.css",
-    "static/js/main.58f090ce.js"
+    "static/js/main.113e3997.js"
   ]
 }
