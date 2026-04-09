@@ -19,11 +19,6 @@ export default function CountdownRing({ countdownMs, progress, nextPrayer, urgen
   const color     = urgent ? 'var(--warn)'         : 'var(--gold)';
   const glowColor = urgent ? 'rgba(220,80,80,0.4)' : 'rgba(200,164,90,0.4)';
 
-  // Moving dot tip position
-  const tipAngleRad = ((180 - p * 180) * Math.PI) / 180;
-  const tipX = CX + R * Math.cos(tipAngleRad);
-  const tipY = CY + R * Math.sin(tipAngleRad);
-
   const untilLabel = nextPrayer ? `until ${nextPrayer.en}` : 'until next prayer';
 
   return (
@@ -42,10 +37,6 @@ export default function CountdownRing({ countdownMs, progress, nextPrayer, urgen
           strokeDashoffset={offset}
           style={{ transition: 'stroke-dashoffset 1s linear, stroke 0.5s', filter: `drop-shadow(0 0 10px ${glowColor})` }}
         />
-        {/* Tip dot */}
-        {p > 0.01 && p < 0.99 && (
-          <circle cx={tipX} cy={tipY} r="8" fill={color} style={{ filter: `drop-shadow(0 0 10px ${glowColor})` }} />
-        )}
       </svg>
 
       {/* Content inside dome — pushed high */}
