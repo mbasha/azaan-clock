@@ -2,27 +2,16 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { ADHAN_PRAYERS } from '../utils/constants';
 
-function playChimeFile(volume = 0.7) {
-  [0, 2000, 4000].forEach(delay => {
-    setTimeout(() => {
-      try {
-        const audio = new Audio('/azaan-clock/chime.mp3');
-        audio.volume = volume;
-        audio.play().catch(e => console.warn('Chime failed:', e));
-      } catch (e) {}
-    }, delay);
-  });
-}
-
 export function useClock(times, settings) {
   const [now, setNow] = useState(new Date());
   const [adhanPrayer, setAdhanPrayer] = useState(null);
-  const firedAdhan   = useRef({});
-  const firedWarn    = useRef({});
+  const firedAdhan     = useRef({});
+  const firedWarn      = useRef({});
   const adhanAudioRef  = useRef(null);
+  const chimeAudioRef  = useRef(null);
   const autoDismissRef = useRef(null);
 
-  // Preload adhan so Safari doesn't block timer-fired play()
+  // Preload adhan
   useEffect(() => {
     const url = settings.customAdhanUrl || settings.adhanUrl;
     if (!url) return;
@@ -33,6 +22,15 @@ export function useClock(times, settings) {
     adhanAudioRef.current = audio;
     return () => { audio.pause(); };
   }, [settings.adhanUrl, settings.customAdhanUrl]);
+
+  useEffect(() => {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = '/azaan-clock/chime.mp3';
+    audio.load();
+    chimeAudioRef.current = audio;
+    return () => { audio.pause(); };
+  }, []);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -69,10 +67,30 @@ export function useClock(times, settings) {
       audio.currentTime = 0;
       audio.play().catch(e => console.warn('Adhan failed:', e));
     } catch (e) {}
-
     if (autoDismissRef.current) clearTimeout(autoDismissRef.current);
     autoDismissRef.current = setTimeout(() => dismissAdhan(), 5 * 60 * 1000);
   }, [settings.adhanVolume, dismissAdhan]);
+
+  const playChime = useCallback((volume = 0.7) => {
+    const audio = chimeAudioRef.current;
+    if (!audio) return;
+    let count = 0;
+    const playOnce = () => {
+      audio.volume = volume;
+      audio.currentTime = 0;
+      audio.play().catch(e => console.warn('Chime failed:', e));
+      count++;
+      if (count < 3) {
+        // Wait for end + small gap before replaying
+        audio.onended = () => {
+          setTimeout(playOnce, 500);
+        };
+      } else {
+        audio.onended = null;
+      }
+    };
+    playOnce();
+  }, []);
 
   useEffect(() => {
     if (!Object.keys(times).length) return;
@@ -82,7 +100,7 @@ export function useClock(times, settings) {
       if (!t) return;
 
       const diffMs = now - t;
-
+      
       const adhanEnabled = p.key !== 'Sunrise' && settings[`enable${p.key}Adhan`] !== false;
       if (adhanEnabled && diffMs >= 0 && diffMs < 30000 && !firedAdhan.current[p.key]) {
         firedAdhan.current[p.key] = true;
@@ -97,12 +115,12 @@ export function useClock(times, settings) {
           const threshold  = settings.warningMinutes || 5;
           if (minsToNext <= threshold && minsToNext > threshold - (1 / 60) && !firedWarn.current[p.key]) {
             firedWarn.current[p.key] = true;
-            if (settings.enableChime !== false) playChimeFile(settings.adhanVolume || 0.7);
+            if (settings.enableChime !== false) playChime(settings.adhanVolume || 0.7);
           }
         }
       }
     });
-  }, [now, times, settings, triggerAdhan]);
+  }, [now, times, settings, triggerAdhan, playChime]);
 
   let activePrayerIdx = -1;
   ADHAN_PRAYERS.forEach((p, i) => {
