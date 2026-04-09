@@ -21,12 +21,12 @@ export function formatTime(date, use24h = true) {
  * Format seconds as HH:MM:SS or MM:SS
  */
 export function formatCountdown(ms) {
-  if (ms > 0 && ms < 60000) return '< 1m';
+  if (ms > 0 && ms < 60000) return '<1 m';
   const totalMins = Math.max(0, Math.floor(ms / 60000));
   const h = Math.floor(totalMins / 60);
   const m = totalMins % 60;
-  if (h > 0) return `${pad(h)}:${pad(m)}`;
-  return `${pad(m)}m`;
+  if (h > 0) return `${pad(h)} : ${pad(m)}`;
+  return `${pad(m)} m`;
 }
 
 /**
